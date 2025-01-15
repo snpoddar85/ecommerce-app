@@ -1,19 +1,10 @@
-name: Deploy AWS Infrastructure
+name: Deploy AWS PreProduction Infrastructure
 
 on:
-  # push:
-  #   branches:
-  #     - iac
-  #   paths:
-  #     - 'Terraform/**' # Trigger on push events to 'iac' branch and changes within 'Terraform' folder
-  # pull_request:
-  #   branches:
-  #     - iac
-  #   paths:
-  #     - 'Terraform/**' # Trigger on pull request events targeting 'iac' branch and changes within 'Terraform' folder
-  workflow_dispatch:
+  push:
+    branches:
+      - iac
 
-  
 
 jobs:
   DeployTerraform:
@@ -33,7 +24,7 @@ jobs:
       - name: Terraform fmt
         id: fmt
         working-directory: Terraform
-        run: terraform fmt -check
+        run: terraform fmt --recursive
         continue-on-error: true
 
       - name: Terraform Init
@@ -49,13 +40,23 @@ jobs:
       - name: Terraform Plan
         id: plan
         working-directory: Terraform
-        run: terraform plan -no-color
-        continue-on-error: true
-      
+        run: terraform plan -no-color -out=plan.out || echo "Plan failed"
+
+      - name: Check Terraform Plan for Changes
+        id: check_plan
+        working-directory: Terraform
+        run: |
+          if grep -q "No changes. Your infrastructure matches the configuration." plan.out; then
+            echo "no_changes=true" >> $GITHUB_ENV
+          else
+            echo "no_changes=false" >> $GITHUB_ENV
+          fi
+
       - name: Terraform Apply
         id: apply
         working-directory: Terraform
-        run: terraform apply --auto-approve
+        run: terraform apply --auto-approve plan.out
+        if: env.no_changes == 'false'
 
       - uses: actions/github-script@v7
         if: github.event_name == 'pull_request'
