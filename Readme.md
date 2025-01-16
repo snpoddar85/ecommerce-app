@@ -143,7 +143,6 @@ terraform apply --auto-approve
 
 ```
 kubectl get svc -n php
-
 ```
 
 ![alt architecture](./screenshots/ecomm.png)
