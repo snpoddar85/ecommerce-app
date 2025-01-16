@@ -1,4 +1,4 @@
-# Deploy Ecommerce PHP APP on AWS
+# 🛒🚀 Deploy E-commerce PHP App on AWS ☁️
 
 ## 🌟 Objective
 🎯 Master the use of Terraform for deploying infrastructure on AWS ☁️, integrate it seamlessly with GitHub Workflows 🤖, and manage deployments efficiently using Kubernetes 🚀.
