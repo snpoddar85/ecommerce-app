@@ -1,7 +1,7 @@
 resource "aws_db_subnet_group" "my_db_subnet_group" {
   name        = "subnet group"
   description = "My DB Subnet Group"
-  subnet_ids  = module.vpc.database_subnets
+  subnet_ids  = module.vpc.public_subnets
 }
 
 resource "aws_db_instance" "mydb" {
