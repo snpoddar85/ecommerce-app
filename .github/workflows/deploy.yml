@@ -95,3 +95,4 @@ jobs:
             kubectl create namespace php
           fi
           kubectl apply -f .
+          kubectl get svc -n php
