@@ -2,6 +2,9 @@ resource "aws_db_subnet_group" "my_db_subnet_group" {
   name        = "subnet group"
   description = "My DB Subnet Group"
   subnet_ids  = module.vpc.public_subnets
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_db_instance" "mydb" {
